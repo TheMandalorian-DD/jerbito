@@ -44,3 +44,4 @@ Task2.Task.print_list (Task2.Task.rev_it [1;2;3]);;
 print_newline ();;
 print_int (Task2.Task.max [1;2;3;4;5]);;
 print_newline ();;
+
