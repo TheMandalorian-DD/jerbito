@@ -7,10 +7,6 @@ let sum ((a, b): int * string) ((c, d): int * string) : int * string =
   (a + c, b ^ d)
 
 (*Question 3*)
-type 'a option = 
-  | None
-  | Some of 'a
-
 let suffix_prefixe (str: string) (c: char) : char option * char option =
   let rec aux (i: int) : char option * char option =
     if (i > String.length str - 1) then (None, None) 
@@ -63,40 +59,76 @@ type report = (subject * grade list) list
 exception Subject_not_found
 exception No_grade of subject
 
-let add_subject (s: subject) (r: report) : report = 
-  let rec aux (rr: report) : report =
-    match rr with
-    | [] -> (s, [])::rr
-    | (s', _)::q when s' = s -> rr
-    | t::q -> t::aux q
-  in aux r
+let rec add_subject (s: subject) (r: report) : report = 
+  match r with
+  | [] -> (s, [])::r
+  | (s', _)::q when s' = s -> r @ q
+  | t::q -> t::add_subject s q
 
-let add_subject_s (s: subject) (r: report) : report = 
+(*let add_subject_s (s: subject) (r: report) : report = 
   if List.exists (fun (s', _) -> s' = s) r then
     r
   else
     (s, [])::r
 
-let add_grade (s: subject) (g: grade) (r: report) : report =
+let add_grade_map (s: subject) (g: grade) (r: report) : report =
   let l = List.map (fun (s', g') -> if s = s' then (s', g::g') else (s', g')) r in
-  if List.for_all2 (=) l r then raise Subject_not_found else l
+  if List.for_all2 (=) l r then raise Subject_not_found else l*)
 
-let add_grade_rec (s: subject) (g: grade) (r: report) : report =
-  let rec aux = function
+let rec add_grade (s: subject) (g: grade) (r: report) : report =
+  match r with
     | [] -> raise Subject_not_found
     | (s', g')::q when s' = s -> (s', g::g')::q
-    | t::q -> t::aux q
-  in aux r
+    | t::q -> t::add_grade s g q
 
-let get_grades (s: subject) (r: report) : grade list = 
-  let rec aux = function
+let rec get_grades (s: subject) (r: report) : grade list = 
+  match r with
     | [] -> raise Subject_not_found
-    | (s', g')::_ when s' = s -> g'
-    | t::q -> aux q
-  in aux r
+    | (s', g')::_ when s' = s -> if g' = [] then raise(No_grade s) else g'
+    | t::q -> get_grades s q
+
+(*let rec get_best_grade (s: subject) (r: report) : grade =
+  match r with
+  | [] -> raise Subject_not_found
+  | (s', g)::_ when s' = s -> let (_, mx) = min_max g in mx
+  | t::q -> get_best_grade s q*)
 
 let get_best_grade (s: subject) (r: report) : grade =
-  let rec max_grade (max: grade) = function
-    | [] -> max
-    | t::q -> if t > max then max_grade t q else max_grade max q
-  in max_grade 0 (get_grades s r)
+  let l = get_grades s r in
+    let (_, mx) = min_max_left l 
+      in mx
+
+let get_best_grade_opt (s: subject) (r: report) : grade option =
+  try Some (get_best_grade s r) with
+  | Empty | Subject_not_found -> None
+
+let rec change_grades (f: int -> int) (s: subject) (r: report) : report =
+  match r with
+  | [] -> raise Subject_not_found
+  | (s', g')::q when s' = s -> if g' = [] then raise(No_grade s) else (s, List.map f g')::q
+  | t::q -> t::change_grades f s q
+
+let compute_avg (s: subject) (r: report) : float =
+  let l = get_grades s r in 
+    let somme = List.fold_left (fun somme elt_i -> somme + elt_i) 0 l in 
+      (float_of_int somme) /. (float_of_int (List.length l))
+
+(*let rec get_best_grades_in (l: subject list) (r: report) : (subject * grade) list =
+  match r with
+  | [] -> []
+  | (s, g)::q when List.exists (fun s' -> s' = s) l -> (s, get_best_grade s r)::get_best_grades_in l q
+  | t::q -> get_best_grades_in l q*)
+
+let rec get_best_grades_in (l: subject list) (r: report) : (subject * grade) list =
+  match l with
+  | [] -> []
+  | t::q -> (t, get_best_grade t r)::get_best_grades_in q r
+
+(*Question 6*)
+let fibo n =
+  print_endline "Calcul.";
+  n + 1
+
+let optimize (inputs: int list) (f: int -> int) : int list =
+  List.map (fun x -> f x) inputs
+
