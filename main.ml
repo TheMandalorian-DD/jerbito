@@ -10,7 +10,7 @@ let res = Task.is_palindrome "ata";;
 Printf.printf "%b" res;;*)
 
 
-print_int (Task2.Task.last [1;2;3;4;5]);;
+(*print_int (Task2.Task.last [1;2;3;4;5]);;
 print_newline ();;
 Task2.Task.print_list (Task2.Task.swap [1;2;3;4;5]);;
 print_newline ();;
@@ -43,5 +43,20 @@ print_newline ();;
 Task2.Task.print_list (Task2.Task.rev_it [1;2;3]);;
 print_newline ();;
 print_int (Task2.Task.max [1;2;3;4;5]);;
-print_newline ();;
+print_newline ();;*)
 
+let res = Task3.Task.resultat Egalite;;
+print_float res;;
+print_newline ();;
+let res = Task3.Task.est_un_weekend Samedi;;
+Printf.printf "%b" res;;
+print_newline ();;
+let res = Task3.Task.est_rouge (Carte (Valet, Trefle));;
+Printf.printf "%b" res;;
+print_newline ();;
+let res = Task3.Task.est_une_tete (Carte (Roi, Trefle));;
+Printf.printf "%b" res;;
+print_newline ();;
+let res = Task3.Task.est_une_tete (Carte (As, Trefle));;
+Printf.printf "%b" res;;
+print_newline ();;
