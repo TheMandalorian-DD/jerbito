@@ -85,7 +85,7 @@ let rec get_grades (s: subject) (r: report) : grade list =
   match r with
     | [] -> raise Subject_not_found
     | (s', g')::_ when s' = s -> if g' = [] then raise(No_grade s) else g'
-    | t::q -> get_grades s q
+    | _::q -> get_grades s q
 
 (*let rec get_best_grade (s: subject) (r: report) : grade =
   match r with

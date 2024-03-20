@@ -33,6 +33,7 @@ type couleur = Pique | Coeur | Carreaux | Trefle
 type valeur = As | Sept | Huit | Neuf | Dix | Valet | Dame | Roi
 type carte_a_jouer = Carte of valeur * couleur
 
+(*
 let est_rouge (c: carte_a_jouer) : bool =
   match c with
   | Carte (_, Coeur) -> true
@@ -44,7 +45,7 @@ let est_une_tete (c: carte_a_jouer) : bool =
   | Carte (Valet, _) -> true
   | Carte (Dame, _) -> true
   | Carte (Roi, _) -> true
-  | _ -> false
+  | _ -> false*)
 
 let score_normal (c: carte_a_jouer) : int =
   match c with
@@ -112,6 +113,7 @@ let division (x: number) (y: number) : number =
 type temperature = Celsius of float 
 
 (*Question 4*)
+(*
 let est_rouge (c: carte_a_jouer) : bool =
   match c with
   | Carte (_, Coeur) | Carte (_, Carreaux) -> true
@@ -120,7 +122,7 @@ let est_rouge (c: carte_a_jouer) : bool =
 let est_une_tete (c: carte_a_jouer) : bool =
   match c with
   | Carte (Valet, _) | Carte (Dame, _) | Carte (Roi, _) -> true
-  | _ -> false 
+  | _ -> false *)
 
 (*Types enregistrements (ou produit)*)
 (*Question 1*)
@@ -166,11 +168,11 @@ type 'a list =
   | []   (** La liste est vide *)
   | ( :: ) of 'a * 'a list  (** Un élément en tête, et le reste de la liste *)
 
-let commence_par_un_trois (l: 'a list) : bool =
+(*let commence_par_un_trois (l: 'a list) : bool =
   match l with
   | [] -> false
   | (t::_) -> t = 3 
-  | _ -> false
+  | _ -> false*)
 
 (*Question 4*)
 let premier_element (l: 'a list) : 'a option =
